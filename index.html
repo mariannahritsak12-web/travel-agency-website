@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet" />
     <title>Biuro podróży</title>
-    <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
     <header>
@@ -44,10 +44,10 @@
             <h2 class="lead">Biuro podróży</h2>
             <h1 class="display-4">Explore the world!</h1>
             <div class="search-form">
-                <form>
+                <form id="search-form" action="oferty.html" method="GET">
                     <div class="row justify-content-center">
                         <div class="col-md-3 mb-3">
-                            <select name="where" class="form-control">
+                            <select name="where" class="form-control" id="destination-input">
                                 <option>Egipt</option>
                                 <option>Stany zjednoczone</option>
                                 <option>Grecja</option>
@@ -62,17 +62,17 @@
                             </select>
                         </div>
                         <div class="col-md-2 mb-3">
-                            <input type="date" class="form-control" placeholder="Data wyjazdu"/>
+                            <input type="date" name="when" class="form-control" id="departure-date-input" placeholder="Data wyjazdu"/>
                         </div>
                         <div class="col-md-2 mb-3">
-                            <input type="number" min="1" class="form-control" placeholder="Długość pobytu"/>
+                            <input type="number" name="duration" min="1" class="form-control" id="duration-input" placeholder="Długość pobytu" />
                         </div>
                         <div class="col-md-2 mb-3">
-                            <input type="number" min="1" class="form-control" placeholder="Liczba podróżniczych"/>
+                            <input type="number" name="travelers" min="1" class="form-control" id="travelers-input" placeholder="Liczba podróżniczych"/>
                         </div>
 
                         <div class="col-md-1 mb-3">
-                            <button type="submit" class="btn btn-orange">Szukaj</button>
+                            <button type="submit" class="btn btn-orange" id="search-btn">Szukaj</button>
                         </div>
                     </div>
                 </form>
@@ -281,6 +281,7 @@
     </footer>
 
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 </body>
 </html>
