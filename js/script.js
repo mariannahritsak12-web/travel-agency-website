@@ -26,6 +26,7 @@ const offers = [
         time: "10.08 – 17.08.2025",
         duration: 7,
         startDate: "2025-08-10",
+        travelers: 2
     },
     {
         id: 2,
@@ -39,6 +40,7 @@ const offers = [
         time: "15.09 – 22.09.2025",
         duration: 7,
         startDate: "2025-09-15",
+        travelers: 1
     },
     {
         id: 3,
@@ -52,6 +54,7 @@ const offers = [
         time: "20.10 – 27.10.2025",
         duration: 7,
         startDate: "2025-10-20",
+        travelers: 4
     },
     {
         id: 4,
@@ -65,6 +68,7 @@ const offers = [
         time: "05.11 – 12.11.2025",
         duration: 7,
         startDate: "2025-11-05",
+        travelers: 2
     }
 ]
 
@@ -74,6 +78,7 @@ let destinationInput;
 let departureDateInput;
 let durationInput;
 let travelersInput;
+let offersContainer;
 
 function handleFormSubmission(event) {
     event.preventDefault();
@@ -84,15 +89,21 @@ function handleFormSubmission(event) {
     const duration = durationInput.value;
     const travelers = travelersInput.value;
 
-    // Filter offers based on user input
-    const filteredOffers = getFilteredOffers(destination, departureDate, duration, travelers);
+    const targetUrl = `oferty.html?destination=${destination}&departureDate=${departureDate}&duration=${duration}&travelers=${travelers}`;
 
-    // Render the filtered offers on the page
-    renderOffers(filteredOffers);
+    // Redirect to the offers page with query parameters
+    window.location.href = targetUrl;
 }
 
-function getFilteredOffers() {
-  // Implement filtering logic based on user input
+function getFilteredOffers(destination, departureDate, duration, travelers) {
+    // Implement filtering logic based on user input
+    return offers.filter(offer => {
+        const matchesDestination = destination ? offer.destination.toLowerCase().includes(destination.toLowerCase()) : true;
+        const matchesDepartureDate = departureDate ? offer.startDate === departureDate : true;
+        const matchesDuration = duration ? offer.duration == duration : true;
+        const matchesTravelers = travelers ? offer.travelers >= travelers : true;
+        return matchesDestination && matchesDepartureDate && matchesDuration && matchesTravelers;
+    });
 }
 
 function findOfferById(offerId) {
@@ -132,17 +143,14 @@ function renderOffers(offers) {
     // Render the filtered offers on the page
     offersContainer.innerHTML = ""; // Clear previous offers
 
-    // Get filtered offers based on user input
-    const filteredOffers = getFilteredOffers(destination, departureDate, duration, travelers);
-
     // Check if there are any offers to display
-    if (filteredOffers.length === 0) {
+    if (offers.length === 0) {
         offersContainer.innerHTML = "<p class='text-center'>Brak ofert spełniających kryteria wyszukiwania.</p>";
         return;
     }
 
     // Render each filtered offer as a card element
-    filteredOffers.forEach(offer => { 
+    offers.forEach(offer => { 
         var offerElement = renderOfferElement(offer);
         offersContainer.appendChild(offerElement);
     })
@@ -164,16 +172,16 @@ function setupEventListeners() {
 function init() { 
     console.log("Initializing the travel agency website...");
 
+    // Select form elements
+    searchForm = document.getElementById("search-form");
+    destinationInput = document.getElementById("destination-input");
+    departureDateInput = document.getElementById("departure-date-input");
+    durationInput = document.getElementById("duration-input");
+    travelersInput = document.getElementById("travelers-input");
+
     // Check if elements are found
     if (searchForm) {
         console.log("You're on the main page. Search form found.");
-
-        // Select form elements
-        const searchForm = document.getElementById("search-form");
-        const destinationInput = document.getElementById("destination-input");
-        const departureDateInput = document.getElementById("departure-date-input");
-        const durationInput = document.getElementById("duration-input");
-        const travelersInput = document.getElementById("travelers-input");
 
         // Set up event listeners
         setupEventListeners();
@@ -182,12 +190,20 @@ function init() {
     if (offersContainer) {
         console.log("You're on the offers page. Offers container found.");
 
-        
         // Select offers container
-        const offersContainer = document.getElementById("offers-container");
+        offersContainer = document.getElementById("offers-container");
+
+        // Get query parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const destination = urlParams.get("destination");
+        const departureDate = urlParams.get("departureDate");
+        const duration = urlParams.get("duration");
+        const travelers = urlParams.get("travelers");
+
+        filteredOffers = getFilteredOffers(destination, departureDate, duration, travelers);
 
         // Load initial offers (if needed) and render them
-        renderOffers(offers);
+        renderOffers(filteredOffers);
     }
 
 
